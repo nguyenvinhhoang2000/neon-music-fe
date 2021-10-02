@@ -9,6 +9,7 @@ import RadioOutlinedIcon from "@mui/icons-material/RadioOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import "./style.scss";
 
 SideBar.propTypes = {};
@@ -25,30 +26,40 @@ function SideBar(props) {
       <div className='zm-sidebar--main'>
         <ul>
           <li className='active'>
-            <LibraryMusicOutlinedIcon />
-            <span>Cá Nhân </span>
+            <NavLink to='/personal'>
+              <LibraryMusicOutlinedIcon />
+              Cá Nhân
+            </NavLink>
           </li>
           <li>
-            <AlbumOutlinedIcon />
-            <span>Khám Phá</span>
+            <NavLink to='/discover'>
+              <AlbumOutlinedIcon />
+              Khám Phá
+            </NavLink>
           </li>
           <li>
-            <TimelineOutlinedIcon />
-            <span>#zingchart</span>
+            <NavLink to='/1'>
+              <TimelineOutlinedIcon />
+              #zingchart
+            </NavLink>
           </li>
           <li>
-            <RadioOutlinedIcon />
-            <span>Radio</span>
-            <figure className='img'>
-              <img
-                src='https://zjs.zadn.vn/zmp3-desktop/dev/147506/static/media/live-tag.e25dd240.svg'
-                alt=''
-              />
-            </figure>
+            <NavLink to='/3'>
+              <RadioOutlinedIcon />
+              Radio
+              <figure className='img'>
+                <img
+                  src='https://zjs.zadn.vn/zmp3-desktop/dev/147506/static/media/live-tag.e25dd240.svg'
+                  alt=''
+                />
+              </figure>
+            </NavLink>
           </li>
           <li>
-            <FavoriteBorderOutlinedIcon />
-            <span>Theo Dõi</span>
+            <NavLink to='/2'>
+              <FavoriteBorderOutlinedIcon />
+              Theo Dõi
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -59,20 +70,28 @@ function SideBar(props) {
         <div className='zm-sidebar--scrolbar'>
           <ul>
             <li>
-              <MusicNoteOutlinedIcon />
-              Nhạc Mới
+              <NavLink to='/4'>
+                <MusicNoteOutlinedIcon />
+                Nhạc Mới
+              </NavLink>
             </li>
             <li>
-              <CategoryOutlinedIcon />
-              Thể Loại
+              <NavLink to='/5'>
+                <CategoryOutlinedIcon />
+                Thể Loại
+              </NavLink>
             </li>
             <li>
-              <StarBorderOutlinedIcon />
-              Top 100
+              <NavLink to='/6'>
+                <StarBorderOutlinedIcon />
+                Top 100
+              </NavLink>
             </li>
             <li>
-              <LiveTvOutlinedIcon />
-              MV
+              <NavLink to='/7'>
+                <LiveTvOutlinedIcon />
+                MV
+              </NavLink>
             </li>
           </ul>
 

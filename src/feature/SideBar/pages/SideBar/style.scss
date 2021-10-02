@@ -33,7 +33,7 @@
     }
   }
 
-  & li:hover {
+  & li a:hover {
     color: #fff;
   }
 
@@ -47,12 +47,6 @@
       list-style-type: none;
 
       & li {
-        height: 24px;
-        padding: 7px 25px;
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-
         & svg {
           margin-right: 10px;
         }
@@ -62,9 +56,21 @@
           margin-left: 8px;
           background-color: inherit;
         }
+
+        & a {
+          border-left: 3px solid transparent;
+
+          height: 24px;
+          padding: 7px 25px;
+          display: flex;
+          cursor: pointer;
+          align-items: center;
+          text-decoration: none;
+          color: #dadada;
+        }
       }
 
-      & .active {
+      & li .active {
         background-color: #ffffff1a;
         color: #fff;
         border-left: 3px solid #7200a1;
@@ -98,15 +104,33 @@
       list-style-type: none;
 
       & li {
-        height: 24px;
-        padding: 7px 25px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
         & svg {
           margin-right: 10px;
         }
+
+        & .img {
+          line-height: 0;
+          margin-left: 8px;
+          background-color: inherit;
+        }
+
+        & a {
+          border-left: 3px solid transparent;
+
+          height: 24px;
+          padding: 7px 25px;
+          display: flex;
+          cursor: pointer;
+          align-items: center;
+          text-decoration: none;
+          color: #dadada;
+        }
+      }
+
+      & li .active {
+        background-color: #ffffff1a;
+        color: #fff;
+        border-left: 3px solid #7200a1;
       }
     }
   }

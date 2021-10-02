@@ -1,12 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 import "./style.scss";
 
 Personal.propTypes = {};
 
 function Personal(props) {
   return (
-    <div>
+    <div className='container' s>
       <div>Cá Nhân</div>
     </div>
   );
