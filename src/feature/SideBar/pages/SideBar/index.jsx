@@ -32,7 +32,7 @@ function SideBar(props) {
             </NavLink>
           </li>
           <li>
-            <NavLink to='/discover'>
+            <NavLink exact to='/'>
               <AlbumOutlinedIcon />
               Khám Phá
             </NavLink>

@@ -4,15 +4,20 @@ import PlayerController from "./feature/PlayerControl/pages/PlayerController";
 import SideBar from "./feature/SideBar/pages/SideBar";
 import Personal from "./feature/Container/pages/Personal";
 import Discover from "./feature/Container/pages/Discover";
+import Header from "./feature/Header";
 
 function App() {
   return (
     <div className='app'>
-      <SideBar />
-      <PlayerController />
+      <div className='main-layout'>
+        <SideBar />
 
-      <Route path='/personal' component={Personal} />
-      <Route path='/discover' component={Discover} />
+        <Header />
+
+        <Route path='/personal' component={Personal} />
+        <Route exact path='/' component={Discover} />
+      </div>
+      <PlayerController />
     </div>
   );
 }

@@ -14,8 +14,19 @@ body {
   font-size: 13px;
 }
 
+.main-layout {
+  height: calc(100vh - 90px);
+  display: flex;
+  width: 100%;
+  min-width: 768px;
+  background-color: #170f23;
+}
+
 .container {
-  margin-left: 240px;
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
 }
 
 .button {
@@ -39,6 +50,19 @@ body {
   cursor: pointer;
   position: relative;
   background-color: transparent;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  word-break: normal;
 }
 
 /* width */
