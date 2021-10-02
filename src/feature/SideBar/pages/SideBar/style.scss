@@ -1,0 +1,163 @@
+.zm-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 240px;
+
+  background-color: #231b2e;
+
+  position: fixed;
+  top: 0;
+
+  font-weight: 700;
+
+  & .zmp3-logo {
+    width: 120px;
+    height: 40px;
+    display: inline-block;
+    background: url(https://zmp3-static.zadn.vn/skins/zmp3-v6.1/images/backgrounds/logo-dark.svg)
+      50% / contain no-repeat;
+  }
+
+  &--logo {
+    display: flex;
+    width: 187px;
+    height: 70px;
+    padding: 0 25px 0 28px;
+
+    & .zm-btn {
+      display: inline-block;
+      line-height: 0;
+      border-radius: 0;
+    }
+  }
+
+  & li:hover {
+    color: #fff;
+  }
+
+  &--main {
+    height: 190px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #dadada;
+
+    & ul {
+      list-style-type: none;
+
+      & li {
+        height: 24px;
+        padding: 7px 25px;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+
+        & svg {
+          margin-right: 10px;
+        }
+
+        & .img {
+          line-height: 0;
+          margin-left: 8px;
+          background-color: inherit;
+        }
+      }
+
+      & .active {
+        background-color: #ffffff1a;
+        color: #fff;
+        border-left: 3px solid #7200a1;
+      }
+    }
+  }
+
+  &--divide {
+    position: relative;
+    height: 1px;
+    width: 100%;
+
+    &::after {
+      content: "";
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      position: absolute;
+      left: 25px;
+      right: 25px;
+      top: 0;
+    }
+  }
+
+  &--scroll {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 302px;
+    color: #dadada;
+
+    & ul {
+      list-style-type: none;
+
+      & li {
+        height: 24px;
+        padding: 7px 25px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        & svg {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  &--scrolbar {
+    position: absolute;
+    inset: 0px;
+    overflow: hidden scroll;
+
+    margin-top: 10px;
+    margin-right: 1px;
+
+    & .vip-banner {
+      padding: 15px 10px;
+      border-radius: 8px;
+      margin: 10px 17px;
+      text-align: center;
+      background-image: linear-gradient(117deg, #5a4be7, #c86dd7 102%);
+
+      & .text {
+        font-size: 12px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        border-color: #ffdb00;
+        line-height: 1.67;
+        color: #fff;
+      }
+
+      & .zm-btn {
+        background-color: #ffdb00;
+        border-color: #ffdb00;
+        color: #32323d;
+        display: inline-block;
+        padding: 6px 35px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &--addplaylist {
+    height: 53px;
+    display: flex;
+    align-items: center;
+    width: 184px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 28px;
+
+    & svg {
+      margin-right: 10px;
+    }
+  }
+}

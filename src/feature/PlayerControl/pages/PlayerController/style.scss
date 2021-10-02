@@ -1,0 +1,20 @@
+.player-controll {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  bottom: 0;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #170f23;
+  height: 90px;
+  min-width: 768px;
+  padding: 0 20px;
+  color: #fff;
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
