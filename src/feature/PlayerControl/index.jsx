@@ -12,22 +12,11 @@ import * as React from "react";
 import "./style.scss";
 import MicExternalOnIcon from "@mui/icons-material/MicExternalOn";
 import { useRef } from "react";
-import imgSrc1 from "../../assets/img/1.jpg";
-import audio1 from "../../assets/music/ChacCoYeuLaDay.mp3";
 import { useState } from "react";
 import { useEffect } from "react";
+import ListSong from "../../assets/listsong";
 
 PlayerController.propTypes = {};
-
-//ListSong
-const ListSong = [
-  {
-    name: "Chắc có yêu là đây",
-    singer: "Sơn Tùn",
-    img: imgSrc1,
-    audioSrc: audio1,
-  },
-];
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -37,32 +26,100 @@ const TinyText = styled(Typography)({
 });
 
 function PlayerController(props) {
+  const [songIndex, setSongIndex] = useState(0);
+  const { name, singer, img, audioSrc } = ListSong[songIndex];
+
+  //hooks
+  const audioRef = useRef(new Audio(audioSrc));
+  const intervalRef = useRef();
+  const isReady = useRef(false);
   const theme = useTheme();
-  const duration = 200; // seconds
-  const [position, setPosition] = React.useState(32);
-  const [paused, setPaused] = React.useState(false);
+  const [position, setPosition] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  //const
+  const { duration } = audioRef.current;
+
+  //func
   function formatDuration(value) {
     const minute = Math.floor(value / 60);
-    const secondLeft = value - minute * 60;
+    const secondLeft = Math.floor(value - minute * 60);
     return `${minute}:${secondLeft < 9 ? `0${secondLeft}` : secondLeft}`;
   }
+
+  const onScrub = (value) => {
+    // Clear any timers already running
+    clearInterval(intervalRef.current);
+    audioRef.current.currentTime = value;
+    setPosition(audioRef.current.currentTime);
+    startTimer();
+  };
+
+  const startTimer = () => {
+    // Clear any timers already running
+    clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      if (audioRef.current.ended) {
+        toNextSong();
+        setPosition(0);
+      } else {
+        setPosition(audioRef.current.currentTime);
+      }
+    }, [1000]);
+  };
+
+  const toPrevSong = () => {
+    if (songIndex - 1 < 0) {
+      setSongIndex(ListSong.length - 1);
+    } else {
+      setSongIndex(songIndex - 1);
+    }
+  };
+
+  const toNextSong = () => {
+    if (songIndex < ListSong.length - 1) {
+      setSongIndex(songIndex + 1);
+      setPosition(0);
+    } else {
+      setSongIndex(0);
+      setPosition(0);
+    }
+  };
+
   const mainIconColor = theme.palette.mode === "light" ? "#fff" : "#000";
   const lightIconColor =
     theme.palette.mode === "light"
       ? "rgba(255,255,255,0.7)"
       : "rgba(0,0,0,0.4)";
   //---------------------------------------------------
-  const { name, singer, img, audioSrc } = ListSong[0];
-  const audioRef = useRef(new Audio(audioSrc));
-  const [isPlaying, setIsPlaying] = useState(false);
 
+  //handle play audio
   useEffect(() => {
-    if (!isPlaying) {
+    if (isPlaying) {
       audioRef.current.play();
+      startTimer();
     } else {
       audioRef.current.pause();
     }
-  });
+  }, [isPlaying]);
+
+  // Handles cleanup and setup when changing tracks
+  useEffect(() => {
+    audioRef.current.pause();
+
+    audioRef.current = new Audio(audioSrc);
+    setPosition(0);
+
+    if (isReady.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      startTimer();
+    } else {
+      // Set the isReady ref as true for the next pass
+      isReady.current = true;
+    }
+  }, [songIndex]);
 
   return (
     <div className='now-playing-bar'>
@@ -81,7 +138,7 @@ function PlayerController(props) {
           <div className='player-controls__player-bar'>
             <div className='level-item'>
               <div className='actions'>
-                <IconButton aria-label='previous song'>
+                <IconButton onClick={toPrevSong} aria-label='previous song'>
                   <FastRewindRounded
                     fontSize='large'
                     htmlColor={mainIconColor}
@@ -92,18 +149,18 @@ function PlayerController(props) {
                   onClick={() => setIsPlaying(!isPlaying)}
                 >
                   {isPlaying ? (
-                    <PlayArrowRounded
+                    <PauseRounded
                       sx={{ fontSize: "3rem" }}
                       htmlColor={mainIconColor}
                     />
                   ) : (
-                    <PauseRounded
+                    <PlayArrowRounded
                       sx={{ fontSize: "3rem" }}
                       htmlColor={mainIconColor}
                     />
                   )}
                 </IconButton>
-                <IconButton aria-label='next song'>
+                <IconButton onClick={toNextSong} aria-label='next song'>
                   <FastForwardRounded
                     fontSize='large'
                     htmlColor={mainIconColor}
@@ -124,8 +181,8 @@ function PlayerController(props) {
                   value={position}
                   min={0}
                   step={1}
-                  max={duration}
-                  onChange={(_, value) => setPosition(value)}
+                  max={duration ? duration : `${duration}`}
+                  onChange={(e) => onScrub(e.target.value)}
                   sx={{
                     color:
                       theme.palette.mode === "light"
@@ -159,7 +216,9 @@ function PlayerController(props) {
               </div>
 
               <span className='time right'>
-                <TinyText>-{formatDuration(duration - position)}</TinyText>
+                <TinyText>
+                  {duration ? formatDuration(duration) : "0:00"}
+                </TinyText>
               </span>
             </div>
           </div>

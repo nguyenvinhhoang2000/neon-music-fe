@@ -1,7 +1,6 @@
 .list-item {
   max-width: 100%;
   flex-grow: 1;
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.05);
 
   & .media {
     display: flex;
@@ -13,6 +12,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.05);
 
     &-left {
       display: flex;
