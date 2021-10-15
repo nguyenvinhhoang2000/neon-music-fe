@@ -1,0 +1,70 @@
+.list-item {
+  max-width: 100%;
+  flex-grow: 1;
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.05);
+
+  & .media {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &-left {
+      display: flex;
+      align-items: center;
+      width: 50%;
+
+      & svg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        margin-right: 10px;
+        color: hsla(0, 0%, 100%, 0.5);
+        font-weight: 700;
+      }
+
+      & .song-thumb {
+        margin-right: 10px;
+        & img {
+          height: 40px;
+          width: 40px;
+        }
+      }
+
+      & .card-info {
+        margin-right: 10px;
+        flex-shrink: 0;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        cursor: pointer;
+        overflow: hidden;
+
+        & p {
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        & span {
+          font-size: 12px;
+          margin-top: 3px;
+          color: hsla(0, 0%, 100%, 0.5);
+        }
+      }
+    }
+
+    &-right {
+      & svg {
+        width: 20px;
+        color: #7200a1;
+      }
+    }
+  }
+}

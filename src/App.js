@@ -1,10 +1,10 @@
 import { Route } from "react-router";
 import "./App.scss";
-import PlayerController from "./feature/PlayerControl/pages/PlayerController";
+import PlayerController from "./feature/PlayerControl";
 import SideBar from "./feature/SideBar/pages/SideBar";
 import Personal from "./feature/Container/pages/Personal";
 import Discover from "./feature/Container/pages/Discover";
-import Header from "./feature/Header";
+import Header from "./components/Header";
 
 function App() {
   return (
