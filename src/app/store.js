@@ -1,6 +1,9 @@
-const { configureStore } = require("@reduxjs/toolkit");
+import { configureStore } from "@reduxjs/toolkit";
+import songListReducer from "components/ListSong/listSongSlice";
 
-const rootReducer = {};
+const rootReducer = {
+  songList: songListReducer,
+};
 
 const store = configureStore({
   reducer: rootReducer,

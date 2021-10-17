@@ -15,6 +15,11 @@ import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import ListSong from "../../assets/listsong";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import RepeatIcon from "@mui/icons-material/Repeat";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 
 PlayerController.propTypes = {};
 
@@ -26,8 +31,12 @@ const TinyText = styled(Typography)({
 });
 
 function PlayerController(props) {
+  const dispath = useDispatch();
+  const songList = useSelector((state) => state.songList);
+
   const [songIndex, setSongIndex] = useState(0);
-  const { name, singer, img, audioSrc } = ListSong[songIndex];
+
+  const { name, singer, img, audioSrc } = songList[songIndex];
 
   //hooks
   const audioRef = useRef(new Audio(audioSrc));
@@ -35,7 +44,9 @@ function PlayerController(props) {
   const isReady = useRef(false);
   const theme = useTheme();
   const [position, setPosition] = useState(0);
+  const [positionVolume, setPositionVolum] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isRepeat, setIsRepeat] = useState(false);
 
   //const
   const { duration } = audioRef.current;
@@ -71,19 +82,46 @@ function PlayerController(props) {
 
   const toPrevSong = () => {
     if (songIndex - 1 < 0) {
-      setSongIndex(ListSong.length - 1);
+      setSongIndex(songList.length - 1);
     } else {
       setSongIndex(songIndex - 1);
     }
   };
 
   const toNextSong = () => {
-    if (songIndex < ListSong.length - 1) {
+    if (songIndex < songList.length - 1) {
       setSongIndex(songIndex + 1);
       setPosition(0);
     } else {
       setSongIndex(0);
       setPosition(0);
+    }
+  };
+
+  //-------------volume----------
+  const onScrubVollume = (value) => {
+    audioRef.current.volume = value;
+    setPositionVolum(audioRef.current.volume);
+  };
+
+  const handleVolumeClick = () => {
+    if (audioRef.current.muted) {
+      audioRef.current.muted = false;
+      setPositionVolum(audioRef.current.volume);
+    } else {
+      audioRef.current.muted = true;
+      setPositionVolum(0);
+    }
+  };
+
+  //----------------repeat--------------
+  const handleRepeatClick = () => {
+    if (isRepeat) {
+      audioRef.current.loop = false;
+      setIsRepeat(audioRef.current.loop);
+    } else {
+      audioRef.current.loop = true;
+      setIsRepeat(audioRef.current.loop);
     }
   };
 
@@ -121,6 +159,12 @@ function PlayerController(props) {
     }
   }, [songIndex]);
 
+  useEffect(() => {
+    audioRef.current.pause();
+
+    setSongIndex(songList.length - 1);
+  }, [songList.length]);
+
   return (
     <div className='now-playing-bar'>
       <div className='player-controls'>
@@ -138,6 +182,9 @@ function PlayerController(props) {
           <div className='player-controls__player-bar'>
             <div className='level-item'>
               <div className='actions'>
+                <IconButton>
+                  <ShuffleIcon fontSize='medium' htmlColor={mainIconColor} />
+                </IconButton>
                 <IconButton onClick={toPrevSong} aria-label='previous song'>
                   <FastRewindRounded
                     fontSize='large'
@@ -163,6 +210,14 @@ function PlayerController(props) {
                 <IconButton onClick={toNextSong} aria-label='next song'>
                   <FastForwardRounded
                     fontSize='large'
+                    htmlColor={mainIconColor}
+                  />
+                </IconButton>
+                <IconButton>
+                  <RepeatIcon
+                    style={isRepeat ? { color: "#7200A1" } : { color: "#fff" }}
+                    onClick={handleRepeatClick}
+                    fontSize='medium'
                     htmlColor={mainIconColor}
                   />
                 </IconButton>
@@ -225,10 +280,24 @@ function PlayerController(props) {
 
           <div className='player-controls-right'>
             <Stack spacing={1} direction='row' alignItems='center'>
-              <VolumeUpRounded htmlColor={lightIconColor} />
+              <IconButton
+                fontSize='medium'
+                htmlColor={mainIconColor}
+                onClick={handleVolumeClick}
+              >
+                {audioRef.current.muted === true ? (
+                  <VolumeOffIcon htmlColor={lightIconColor} />
+                ) : (
+                  <VolumeUpRounded htmlColor={lightIconColor} />
+                )}
+              </IconButton>
               <Slider
                 aria-label='Volume'
-                defaultValue={30}
+                value={positionVolume}
+                min={0}
+                step={0.1}
+                max={1}
+                onChange={(e) => onScrubVollume(e.target.value)}
                 sx={{
                   color:
                     theme.palette.mode === "light"

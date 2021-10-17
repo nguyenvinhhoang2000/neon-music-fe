@@ -7,18 +7,21 @@ import audio3 from "./music/RealLove-JustaTee-Kimmese_3p3a9.mp3";
 
 export default [
   {
+    id: 1,
     name: "Chắc có yêu là đây",
     singer: "Sơn Tùn",
     img: imgSrc1,
     audioSrc: audio1,
   },
   {
+    id: 2,
     name: "Muộn rồi mà sao còn",
     singer: "Sơn Tùn",
     img: imgSrc2,
     audioSrc: audio2,
   },
   {
+    id: 3,
     name: "Real Love",
     singer: "Quen Ten Roi",
     img: imgSrc3,
