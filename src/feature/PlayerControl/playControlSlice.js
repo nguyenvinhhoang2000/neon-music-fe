@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import imgSrc1 from "../../assets/img/1.jpg";
 import audio1 from "../../assets/music/ChacCoYeuLaDay.mp3";
 
-const songLikeListSlice = createSlice({
+const playControlSlice = createSlice({
   name: "songlist",
   initialState: [
     {
@@ -21,11 +21,11 @@ const songLikeListSlice = createSlice({
       }
     },
     removeSongList(state, action) {
-      state.splice(action.payload, 1);
+      state.splice(action.payload.id - 1, 1);
     },
   },
 });
 
-const { actions, reducer } = songLikeListSlice;
+const { actions, reducer } = playControlSlice;
 export const { addSongList, removeSongList } = actions;
 export default reducer;

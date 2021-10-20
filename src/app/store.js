@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import songListReducer from "components/ListSong/listSongSlice";
+import playControlSlice from "feature/PlayerControl/playControlSlice";
 
 const rootReducer = {
-  songList: songListReducer,
+  playingList: playControlSlice,
 };
 
 const store = configureStore({

@@ -2,24 +2,22 @@ import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
 import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
 import PauseRounded from "@mui/icons-material/PauseRounded";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+import QueueMusicIcon from "@mui/icons-material/QueueMusic";
+import RepeatIcon from "@mui/icons-material/Repeat";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpRounded from "@mui/icons-material/VolumeUpRounded";
+import { Tooltip } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import { styled, useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Drawer from "./components/Drawer";
 import "./style.scss";
-import MicExternalOnIcon from "@mui/icons-material/MicExternalOn";
-import { useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import ListSong from "../../assets/listsong";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
-import RepeatIcon from "@mui/icons-material/Repeat";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 
 PlayerController.propTypes = {};
 
@@ -32,11 +30,12 @@ const TinyText = styled(Typography)({
 
 function PlayerController(props) {
   const dispath = useDispatch();
-  const songList = useSelector((state) => state.songList);
+  const songList = useSelector((state) => state.playingList);
 
   const [songIndex, setSongIndex] = useState(0);
 
-  const { name, singer, img, audioSrc } = songList[songIndex];
+  const { name, singer, img, audioSrc, id } = songList[songIndex];
+  //------xoay cdthumb
 
   //hooks
   const audioRef = useRef(new Audio(audioSrc));
@@ -47,6 +46,7 @@ function PlayerController(props) {
   const [positionVolume, setPositionVolum] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRepeat, setIsRepeat] = useState(false);
+  const [isRandom, setIsRanDom] = useState(false);
 
   //const
   const { duration } = audioRef.current;
@@ -72,8 +72,12 @@ function PlayerController(props) {
 
     intervalRef.current = setInterval(() => {
       if (audioRef.current.ended) {
-        toNextSong();
-        setPosition(0);
+        if (isRandom) {
+          randomIndex();
+        } else {
+          toNextSong();
+          setPosition(0);
+        }
       } else {
         setPosition(audioRef.current.currentTime);
       }
@@ -81,20 +85,28 @@ function PlayerController(props) {
   };
 
   const toPrevSong = () => {
-    if (songIndex - 1 < 0) {
-      setSongIndex(songList.length - 1);
+    if (isRandom) {
+      randomIndex();
     } else {
-      setSongIndex(songIndex - 1);
+      if (songIndex - 1 < 0) {
+        setSongIndex(songList.length - 1);
+      } else {
+        setSongIndex(songIndex - 1);
+      }
     }
   };
 
   const toNextSong = () => {
-    if (songIndex < songList.length - 1) {
-      setSongIndex(songIndex + 1);
-      setPosition(0);
+    if (isRandom) {
+      randomIndex();
     } else {
-      setSongIndex(0);
-      setPosition(0);
+      if (songIndex < songList.length - 1) {
+        setSongIndex(songIndex + 1);
+        setPosition(0);
+      } else {
+        setSongIndex(0);
+        setPosition(0);
+      }
     }
   };
 
@@ -125,12 +137,37 @@ function PlayerController(props) {
     }
   };
 
+  //------------------random-------------
+  const handleRandomClick = () => {
+    if (isRandom) {
+      setIsRanDom(false);
+    } else {
+      setIsRanDom(true);
+    }
+  };
+
+  const randomIndex = () => {
+    const random = Math.floor(Math.random() * songList.length);
+    setSongIndex(random);
+  };
+
   const mainIconColor = theme.palette.mode === "light" ? "#fff" : "#000";
   const lightIconColor =
     theme.palette.mode === "light"
       ? "rgba(255,255,255,0.7)"
       : "rgba(0,0,0,0.4)";
   //---------------------------------------------------
+
+  //----------SongListPlaying--------
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleSongListClick = () => {
+    if (isOpen) {
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
+  };
 
   //handle play audio
   useEffect(() => {
@@ -159,12 +196,6 @@ function PlayerController(props) {
     }
   }, [songIndex]);
 
-  useEffect(() => {
-    audioRef.current.pause();
-
-    setSongIndex(songList.length - 1);
-  }, [songList.length]);
-
   return (
     <div className='now-playing-bar'>
       <div className='player-controls'>
@@ -182,9 +213,18 @@ function PlayerController(props) {
           <div className='player-controls__player-bar'>
             <div className='level-item'>
               <div className='actions'>
-                <IconButton>
-                  <ShuffleIcon fontSize='medium' htmlColor={mainIconColor} />
-                </IconButton>
+                <Tooltip title='Phát ngẫu nhiên' arrow>
+                  <IconButton>
+                    <ShuffleIcon
+                      style={
+                        isRandom ? { color: "#7200A1" } : { color: "#fff" }
+                      }
+                      onClick={handleRandomClick}
+                      fontSize='medium'
+                      htmlColor={mainIconColor}
+                    />
+                  </IconButton>
+                </Tooltip>
                 <IconButton onClick={toPrevSong} aria-label='previous song'>
                   <FastRewindRounded
                     fontSize='large'
@@ -213,14 +253,18 @@ function PlayerController(props) {
                     htmlColor={mainIconColor}
                   />
                 </IconButton>
-                <IconButton>
-                  <RepeatIcon
-                    style={isRepeat ? { color: "#7200A1" } : { color: "#fff" }}
-                    onClick={handleRepeatClick}
-                    fontSize='medium'
-                    htmlColor={mainIconColor}
-                  />
-                </IconButton>
+                <Tooltip title='Lặp lại' arrow>
+                  <IconButton>
+                    <RepeatIcon
+                      style={
+                        isRepeat ? { color: "#7200A1" } : { color: "#fff" }
+                      }
+                      onClick={handleRepeatClick}
+                      fontSize='medium'
+                      htmlColor={mainIconColor}
+                    />
+                  </IconButton>
+                </Tooltip>
               </div>
             </div>
 
@@ -321,8 +365,20 @@ function PlayerController(props) {
                 }}
               />
             </Stack>
+
+            <Tooltip title='Danh sách phát' arrow>
+              <IconButton onClick={handleSongListClick}>
+                <QueueMusicIcon
+                  style={isOpen ? { color: "#7200A1" } : { color: "#fff" }}
+                  htmlColor={mainIconColor}
+                />
+              </IconButton>
+            </Tooltip>
           </div>
         </div>
+      </div>
+      <div className={isOpen ? "drawer-bar is-show" : "drawer-bar"}>
+        <Drawer songId={id} />
       </div>
     </div>
   );

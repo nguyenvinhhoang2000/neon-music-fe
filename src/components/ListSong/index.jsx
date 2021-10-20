@@ -1,25 +1,23 @@
+import AddIcon from "@mui/icons-material/Add";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { IconButton } from "@mui/material";
 import Button from "@mui/material/Button";
+import { addSongList } from "feature/PlayerControl/playControlSlice";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ListSongs from "../../assets/listsong";
-import { playSongList } from "./listSongSlice";
 import "./style.scss";
-import AddIcon from "@mui/icons-material/Add";
 
 ListSong.propTypes = {};
 
 function ListSong(props) {
   const dispath = useDispatch();
-  const songList = useSelector((state) => state.songList);
   const handleAddSong = (songlist, id) => {
-    // const action = addSongList(songlist, songlist.id);
-    const action2 = playSongList(songlist);
-    dispath(action2);
+    const action = addSongList(songlist);
+    dispath(action);
   };
 
   return (

@@ -52,7 +52,7 @@
       }
 
       & .content {
-        max-width: 100px;
+        max-width: 100%;
 
         & .name-song {
           font-size: 14px;
@@ -143,11 +143,33 @@
       width: 30%;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
 
       & div {
         width: 150px;
+        padding-right: 25px;
+        margin-right: 10px;
+        border-right: 1px solid rgba(172, 172, 172, 0.288);
       }
     }
+  }
+
+  & .drawer-bar {
+    position: absolute;
+    right: 0;
+    bottom: 91px;
+
+    height: calc(100vh - 91px);
+    width: 320px;
+    background-color: #120822;
+
+    z-index: 2;
+
+    transform: translateX(325px);
+    transition: all 0.5s;
+  }
+
+  & .is-show {
+    transform: none;
   }
 }
