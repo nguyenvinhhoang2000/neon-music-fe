@@ -14,8 +14,8 @@ function App() {
 
         <Header />
 
-        <Route path='/personal' component={Personal} />
-        <Route exact path='/' component={Discover} />
+        <Route exact path='/' component={Personal} />
+        <Route path='/discover' component={Discover} />
       </div>
       <PlayerController />
     </div>

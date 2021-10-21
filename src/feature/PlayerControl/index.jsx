@@ -35,8 +35,6 @@ function PlayerController(props) {
   const [songIndex, setSongIndex] = useState(0);
 
   const { name, singer, img, audioSrc, id } = songList[songIndex];
-  //------xoay cdthumb
-
   //hooks
   const audioRef = useRef(new Audio(audioSrc));
   const intervalRef = useRef();
@@ -75,8 +73,13 @@ function PlayerController(props) {
         if (isRandom) {
           randomIndex();
         } else {
-          toNextSong();
-          setPosition(0);
+          if (songList.length === 1) {
+            setPosition(0);
+            setIsPlaying(false);
+          } else {
+            toNextSong();
+            setPosition(0);
+          }
         }
       } else {
         setPosition(audioRef.current.currentTime);
@@ -167,6 +170,11 @@ function PlayerController(props) {
     } else {
       setIsOpen(true);
     }
+  };
+
+  //------------handlClickChangeSong---------------
+  const hanldSongClick = (index) => {
+    setSongIndex(index);
   };
 
   //handle play audio
@@ -378,7 +386,7 @@ function PlayerController(props) {
         </div>
       </div>
       <div className={isOpen ? "drawer-bar is-show" : "drawer-bar"}>
-        <Drawer songId={id} />
+        <Drawer songId={id} songIndex={hanldSongClick} />
       </div>
     </div>
   );

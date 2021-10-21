@@ -167,6 +167,8 @@
 
     transform: translateX(325px);
     transition: all 0.5s;
+
+    overflow: hidden;
   }
 
   & .is-show {

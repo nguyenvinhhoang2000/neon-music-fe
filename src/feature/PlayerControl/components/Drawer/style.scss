@@ -13,6 +13,8 @@
   }
   &-list {
     padding: 0 8px;
+    height: calc(100vh - 157.8px);
+    overflow: scroll;
 
     & .media {
       display: flex;
@@ -25,7 +27,7 @@
       border-radius: 8px;
 
       & button {
-        padding: 0 20px;
+        margin-right: 15px;
         opacity: 0;
         transition: all 0.3s;
 

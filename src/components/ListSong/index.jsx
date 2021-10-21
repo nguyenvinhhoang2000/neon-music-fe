@@ -20,6 +20,13 @@ function ListSong(props) {
     dispath(action);
   };
 
+  const handleClickPlayAll = () => {
+    ListSongs.map((x) => {
+      const action = addSongList(x);
+      dispath(action);
+    });
+  };
+
   return (
     <div>
       <div className='song-list-header'>
@@ -38,7 +45,7 @@ function ListSong(props) {
               Tải lên
             </a>
           </label>
-          <Button variant='contained'>
+          <Button onClick={handleClickPlayAll} variant='contained'>
             <PlayArrowIcon />
             PHÁT TẤT CẢ
           </Button>

@@ -68,3 +68,7 @@ textarea {
   background: rgba(255, 255, 255, 0.493);
   border-radius: 90px;
 }
+::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}

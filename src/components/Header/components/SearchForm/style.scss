@@ -3,24 +3,27 @@
   width: 100%;
   max-width: 540px;
 
+  & .is-focus {
+    border-radius: 20px 20px 0 0;
+    // box-shadow: 0 1px 5px 0 rgb(0 0 0 / 20%);
+    background-color: #432275;
+    border: 1px solid transparent;
+  }
+
   &__container {
     position: relative;
     border-radius: 20px;
     height: 40px;
     background-color: hsla(0, 0%, 100%, 0.1);
 
-    & .zm-btn {
+    & svg {
       display: flex;
       align-items: center;
-
-      & svg {
-        position: absolute;
-        cursor: pointer;
-        font-size: 20px;
-        top: 9px;
-        left: 10px;
-        color: #dadada;
-      }
+      position: absolute;
+      font-size: 20px;
+      top: 9px;
+      left: 10px;
+      color: #dadada;
     }
 
     & .input-wrapper {
@@ -51,6 +54,43 @@
 
       &:focus {
         outline: none;
+      }
+    }
+  }
+
+  & .suggest__list {
+    position: absolute;
+    overflow: hidden;
+    width: calc(100% - 20px);
+    height: auto;
+    min-height: 0;
+    max-height: 601px;
+    background-color: #432275;
+    z-index: 5;
+    display: block;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    // box-shadow: 0 4px 6px 0 rgb(32 33 36 / 28%);
+    padding: 13px 10px;
+    color: #fff;
+
+    & .suggest__item {
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 8px 10px;
+      position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+
+      & svg {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        color: #dadada;
+        margin-right: 5px;
       }
     }
   }

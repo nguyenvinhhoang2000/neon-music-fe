@@ -10,18 +10,32 @@ import "./style.scss";
 
 Drawer.propTypes = {
   songId: PropTypes.any,
+  songIndex: PropTypes.any,
 };
 
 function Drawer(props) {
-  const { songId } = props;
+  const { songId, songIndex } = props;
 
   const dispath = useDispatch();
   const songList = useSelector((state) => state.playingList);
 
   //func
-  const handleDeleteSong = (song, id) => {
-    const action = removeSongList(song);
-    dispath(action);
+  const hanldClickSong = (song) => {
+    const index = songList.indexOf(song);
+    songIndex(index);
+  };
+
+  const handleDeleteSong = (song) => {
+    const songAtTheEnd = songList.length - 1 === songList.indexOf(song);
+    const deleteSongPlaying = songId === song.id;
+    if (songAtTheEnd || deleteSongPlaying) {
+      songIndex(0);
+      const action = removeSongList(song);
+      dispath(action);
+    } else {
+      const action = removeSongList(song);
+      dispath(action);
+    }
   };
 
   return (
@@ -36,9 +50,11 @@ function Drawer(props) {
             <div
               key={songlist.id}
               className={songId === songlist.id ? "media is-playing" : "media"}
-              onClick={() => handleDeleteSong(songlist, songlist.id)}
             >
-              <div className='media-item'>
+              <div
+                onClick={() => hanldClickSong(songlist)}
+                className='media-item'
+              >
                 <MusicNoteIcon />
                 <div className='song-thumb'>
                   <img src={songlist.img} alt='' />
@@ -50,7 +66,9 @@ function Drawer(props) {
                 </div>
               </div>
               <Tooltip title='xóa khõi danh sách' arrow>
-                <IconButton>
+                <IconButton
+                  onClick={() => handleDeleteSong(songlist, songlist.id)}
+                >
                   <CloseIcon />
                 </IconButton>
               </Tooltip>

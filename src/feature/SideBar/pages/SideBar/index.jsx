@@ -26,13 +26,13 @@ function SideBar(props) {
       <div className='zm-sidebar--main'>
         <ul>
           <li className='active'>
-            <NavLink to='/personal'>
+            <NavLink exact to='/'>
               <LibraryMusicOutlinedIcon />
               Cá Nhân
             </NavLink>
           </li>
           <li>
-            <NavLink exact to='/'>
+            <NavLink to='/discover'>
               <AlbumOutlinedIcon />
               Khám Phá
             </NavLink>
