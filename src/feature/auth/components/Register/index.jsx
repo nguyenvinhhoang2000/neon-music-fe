@@ -1,6 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { register } from "feature/auth/userSlice";
 import { useSnackbar } from "notistack";
+
 import PropTypes from "prop-types";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -13,14 +14,18 @@ Register.propTypes = {
 function Register(props) {
   const dispatch = useDispatch();
 
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
     try {
-      //auto set username = email
-      values.username = values.email;
+      let formData = new FormData();
 
-      const action = register(values);
+      formData.append("name", values.name);
+      formData.append("username", values.email);
+      formData.append("password", values.password);
+      formData.append("image", values.avatar);
+
+      const action = register(formData);
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
 
@@ -30,9 +35,9 @@ function Register(props) {
         closeDialog();
       }
 
-      // enqueueSnackbar("Đăng kí thành công!!!", { variant: "success" });
+      enqueueSnackbar("Đăng kí thành công!!!", { variant: "success" });
     } catch (error) {
-      // enqueueSnackbar(error.message, { variant: "error" });
+      enqueueSnackbar(error.message, { variant: "error" });
     }
   };
 

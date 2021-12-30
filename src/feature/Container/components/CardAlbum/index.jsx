@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./style.scss";
 import img from "assets/img/album/justatee.png";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 CardAlbum.propTypes = {};
 

@@ -5,32 +5,24 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { IconButton, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
+import favoriteSong from "api/favoriteSong";
+import { disLike } from "feature/Container/pages/Personal/favoriteSongSlice";
 import { addSongList } from "feature/PlayerControl/playControlSlice";
 import PropTypes from "prop-types";
 import React from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useDispatch, useSelector } from "react-redux";
-import "./style.scss";
 import { useState } from "react";
-import {
-  disLike,
-  like,
-  likeSong,
-  playAllFavoriteSong,
-} from "feature/Container/pages/Personal/favoriteSongSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
-import favoriteSong from "api/favoriteSong";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import "./style.scss";
 
-ListSong.propTypes = {
+ListSongPersonal.propTypes = {
   songList: PropTypes.array,
 };
 
-function ListSong(props) {
+function ListSongPersonal(props) {
   const { songList } = props;
 
   const dispatch = useDispatch();
-  const songLiked = useSelector((state) => state.favoriteSong);
 
   const handleAddSong = (songlist, id) => {
     const action = addSongList(songlist);
@@ -39,40 +31,15 @@ function ListSong(props) {
 
   const handleClickPlayAll = () => {
     songList.map((x) => {
-      const action = addSongList(x);
+      const action = addSongList(x.song);
       dispatch(action);
     });
   };
 
   //---------------func-----------------
-  const handleClickLike = async (values) => {
-    try {
-      const data = {
-        song: values._id,
-      };
-      const action = like(data);
-      const resultAction = await dispatch(action);
-      unwrapResult(resultAction);
-
-      //call api agin
-      //favoriteSong
-      const fetchFavoriteSongList = async () => {
-        const getFavoriteSong = await favoriteSong.getAll();
-
-        getFavoriteSong.favoriteSongList.map((x) => {
-          const action = playAllFavoriteSong(x);
-          dispatch(action);
-        });
-      };
-      fetchFavoriteSongList();
-    } catch (error) {
-      console.log("loi", error);
-    }
-  };
-
   const handleClickDisLike = async (values) => {
     try {
-      favoriteSong.disLike(values._id);
+      await favoriteSong.disLike(values._id);
       const action = disLike(values._id);
       dispatch(action);
     } catch (error) {
@@ -83,7 +50,7 @@ function ListSong(props) {
   return (
     <div>
       <div className='song-list-header'>
-        <h3 className='zm-section-title'>Bài Hát</h3>
+        <h3 className='zm-section-title'>Bài Hát Đã Thích</h3>
         <div className='section-button'>
           <input
             id='up-button'
@@ -107,19 +74,19 @@ function ListSong(props) {
       <div className='list-item'>
         {songList.map((songlist) => (
           <div
-            key={songlist?.key}
-            onClick={() => handleAddSong(songlist, songlist?.key)}
+            key={songlist?.song?.key}
+            onClick={() => handleAddSong(songlist?.song, songlist?.song?.key)}
             className='media'
           >
             <div className='media-left'>
               <MusicNoteIcon />
               <div className='song-thumb'>
-                <img src={songlist?.img} alt='' />
+                <img src={songlist?.song?.img} alt='' />
               </div>
 
               <div className='card-info'>
-                <p>{songlist?.name}</p>
-                <span>{songlist?.singer}</span>
+                <p>{songlist?.song?.name}</p>
+                <span>{songlist?.song?.singer}</span>
               </div>
             </div>
 
@@ -127,19 +94,11 @@ function ListSong(props) {
               <IconButton>
                 <AddIcon />
               </IconButton>
-              {songLiked.find((x) => x?.song?._id === songlist?._id) ? (
-                <Tooltip title='Bỏ yêu thích' placement='top' arrow>
-                  <IconButton onClick={() => handleClickDisLike(songlist)}>
-                    <FavoriteIcon />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Tooltip title='Yêu thích' placement='top' arrow>
-                  <IconButton onClick={() => handleClickLike(songlist)}>
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
+              <Tooltip title='Bỏ yêu thích' placement='top' arrow>
+                <IconButton onClick={() => handleClickDisLike(songlist?.song)}>
+                  <FavoriteIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         ))}
@@ -148,4 +107,4 @@ function ListSong(props) {
   );
 }
 
-export default ListSong;
+export default ListSongPersonal;

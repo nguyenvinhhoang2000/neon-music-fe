@@ -1,18 +1,17 @@
-import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
-import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
-import PauseRounded from "@mui/icons-material/PauseRounded";
-import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Slider from "@mui/material/Slider";
+import { styled, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import FastRewindIcon from "@mui/icons-material/FastRewind";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import VolumeUpRounded from "@mui/icons-material/VolumeUpRounded";
-import { Tooltip } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Slider from "@mui/material/Slider";
-import Stack from "@mui/material/Stack";
-import { styled, useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,9 +33,10 @@ function PlayerController(props) {
 
   const [songIndex, setSongIndex] = useState(0);
 
-  const { name, singer, img, audioSrc, id } = songList[songIndex];
+  const { name, singer, img, url, _id } = songList[songIndex];
+
   //hooks
-  const audioRef = useRef(new Audio(audioSrc));
+  const audioRef = useRef(new Audio(url));
   const intervalRef = useRef();
   const isReady = useRef(false);
   const theme = useTheme();
@@ -56,7 +56,7 @@ function PlayerController(props) {
     return `${minute}:${secondLeft < 9 ? `0${secondLeft}` : secondLeft}`;
   }
 
-  const onScrub = (value) => {
+  const onScrub = (e, value) => {
     // Clear any timers already running
     clearInterval(intervalRef.current);
     audioRef.current.currentTime = value;
@@ -114,7 +114,7 @@ function PlayerController(props) {
   };
 
   //-------------volume----------
-  const onScrubVollume = (value) => {
+  const onScrubVollume = (e, value) => {
     audioRef.current.volume = value;
     setPositionVolum(audioRef.current.volume);
   };
@@ -154,11 +154,6 @@ function PlayerController(props) {
     setSongIndex(random);
   };
 
-  const mainIconColor = theme.palette.mode === "light" ? "#fff" : "#000";
-  const lightIconColor =
-    theme.palette.mode === "light"
-      ? "rgba(255,255,255,0.7)"
-      : "rgba(0,0,0,0.4)";
   //---------------------------------------------------
 
   //----------SongListPlaying--------
@@ -191,7 +186,7 @@ function PlayerController(props) {
   useEffect(() => {
     audioRef.current.pause();
 
-    audioRef.current = new Audio(audioSrc);
+    audioRef.current = new Audio(url);
     setPosition(0);
 
     if (isReady.current) {
@@ -202,7 +197,7 @@ function PlayerController(props) {
       // Set the isReady ref as true for the next pass
       isReady.current = true;
     }
-  }, [songIndex]);
+  }, [songList[songIndex]._id]);
 
   return (
     <div className='now-playing-bar'>
@@ -222,54 +217,75 @@ function PlayerController(props) {
             <div className='level-item'>
               <div className='actions'>
                 <Tooltip title='Phát ngẫu nhiên' arrow>
-                  <IconButton>
+                  <IconButton
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "rgb(255 255 255 / 16%)",
+                      },
+                    }}
+                  >
                     <ShuffleIcon
                       style={
                         isRandom ? { color: "#7200A1" } : { color: "#fff" }
                       }
                       onClick={handleRandomClick}
                       fontSize='medium'
-                      htmlColor={mainIconColor}
                     />
                   </IconButton>
                 </Tooltip>
-                <IconButton onClick={toPrevSong} aria-label='previous song'>
-                  <FastRewindRounded
-                    fontSize='large'
-                    htmlColor={mainIconColor}
-                  />
+                <IconButton
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "rgb(255 255 255 / 16%)",
+                    },
+                  }}
+                  onClick={toPrevSong}
+                  aria-label='previous song'
+                >
+                  <FastRewindIcon fontSize='large' style={{ color: "#fff" }} />
                 </IconButton>
                 <IconButton
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "rgb(255 255 255 / 16%)",
+                    },
+                  }}
                   aria-label={isPlaying ? "play" : "pause"}
                   onClick={() => setIsPlaying(!isPlaying)}
                 >
                   {isPlaying ? (
-                    <PauseRounded
-                      sx={{ fontSize: "3rem" }}
-                      htmlColor={mainIconColor}
-                    />
+                    <PauseIcon style={{ color: "#fff", fontSize: "2.5rem" }} />
                   ) : (
-                    <PlayArrowRounded
-                      sx={{ fontSize: "3rem" }}
-                      htmlColor={mainIconColor}
+                    <PlayArrowIcon
+                      style={{ color: "#fff", fontSize: "2.5rem" }}
                     />
                   )}
                 </IconButton>
-                <IconButton onClick={toNextSong} aria-label='next song'>
-                  <FastForwardRounded
-                    fontSize='large'
-                    htmlColor={mainIconColor}
-                  />
+                <IconButton
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "rgb(255 255 255 / 16%)",
+                    },
+                  }}
+                  onClick={toNextSong}
+                  aria-label='next song'
+                >
+                  <FastForwardIcon fontSize='large' style={{ color: "#fff" }} />
                 </IconButton>
                 <Tooltip title='Lặp lại' arrow>
-                  <IconButton>
+                  <IconButton
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "rgb(255 255 255 / 16%)",
+                      },
+                    }}
+                  >
                     <RepeatIcon
                       style={
                         isRepeat ? { color: "#7200A1" } : { color: "#fff" }
                       }
                       onClick={handleRepeatClick}
                       fontSize='medium'
-                      htmlColor={mainIconColor}
                     />
                   </IconButton>
                 </Tooltip>
@@ -283,18 +299,14 @@ function PlayerController(props) {
 
               <div className='zm-duration-bar'>
                 <Slider
-                  aria-label='time-indicator'
                   size='small'
                   value={position}
                   min={0}
                   step={1}
-                  max={duration ? duration : `${duration}`}
-                  onChange={(e) => onScrub(e.target.value)}
+                  max={duration ? duration : 0}
+                  onChange={onScrub}
                   sx={{
-                    color:
-                      theme.palette.mode === "light"
-                        ? "#fff"
-                        : "rgba(0,0,0,0.87)",
+                    color: "#fff",
                     height: 4,
                     "& .MuiSlider-thumb": {
                       width: 8,
@@ -304,11 +316,8 @@ function PlayerController(props) {
                         boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
                       },
                       "&:hover, &.Mui-focusVisible": {
-                        boxShadow: `0px 0px 0px 8px ${
-                          theme.palette.mode === "dark"
-                            ? "rgb(255 255 255 / 16%)"
-                            : "rgb(0 0 0 / 16%)"
-                        }`,
+                        boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)
+                        `,
                       },
                       "&.Mui-active": {
                         width: 20,
@@ -331,54 +340,70 @@ function PlayerController(props) {
           </div>
 
           <div className='player-controls-right'>
-            <Stack spacing={1} direction='row' alignItems='center'>
-              <IconButton
-                fontSize='medium'
-                htmlColor={mainIconColor}
-                onClick={handleVolumeClick}
-              >
-                {audioRef.current.muted === true ? (
-                  <VolumeOffIcon htmlColor={lightIconColor} />
-                ) : (
-                  <VolumeUpRounded htmlColor={lightIconColor} />
-                )}
-              </IconButton>
-              <Slider
-                aria-label='Volume'
-                value={positionVolume}
-                min={0}
-                step={0.1}
-                max={1}
-                onChange={(e) => onScrubVollume(e.target.value)}
-                sx={{
-                  color:
-                    theme.palette.mode === "light"
-                      ? "#fff"
-                      : "rgba(0,0,0,0.87)",
-                  height: 2.5,
-                  "& .MuiSlider-track": {
-                    border: "none",
+            <IconButton
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgb(255 255 255 / 16%)",
+                },
+              }}
+              fontSize='medium'
+              style={{ color: "#fff" }}
+              onClick={handleVolumeClick}
+            >
+              {audioRef.current.volume === 0 ||
+              audioRef.current.muted === true ? (
+                <VolumeOffIcon style={{ color: "#fff" }} />
+              ) : (
+                <VolumeUpIcon style={{ color: "#fff" }} />
+              )}
+            </IconButton>
+            <Slider
+              aria-label='Volume'
+              value={positionVolume}
+              min={0}
+              step={0.1}
+              max={1}
+              onChange={onScrubVollume}
+              sx={{
+                width: 120,
+                color: "#fff",
+                height: 4,
+                "& .MuiSlider-track": {
+                  height: 2,
+                },
+                "& .MuiSlider-thumb": {
+                  width: 8,
+                  height: 8,
+                  transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                  "&:before": {
+                    boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
                   },
-                  "& .MuiSlider-thumb": {
-                    width: 12,
-                    height: 12,
-                    backgroundColor: "#fff",
-                    "&:before": {
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.4)",
-                    },
-                    "&:hover, &.Mui-focusVisible, &.Mui-active": {
-                      boxShadow: "none",
-                    },
+                  "&:hover, &.Mui-focusVisible": {
+                    boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)
+                    `,
                   },
-                }}
-              />
-            </Stack>
+                  "&.Mui-active": {
+                    width: 15,
+                    height: 15,
+                  },
+                },
+                "& .MuiSlider-rail": {
+                  opacity: 0.28,
+                },
+              }}
+            />
 
             <Tooltip title='Danh sách phát' arrow>
-              <IconButton onClick={handleSongListClick}>
+              <IconButton
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "rgb(255 255 255 / 16%)",
+                  },
+                }}
+                onClick={handleSongListClick}
+              >
                 <QueueMusicIcon
                   style={isOpen ? { color: "#7200A1" } : { color: "#fff" }}
-                  htmlColor={mainIconColor}
                 />
               </IconButton>
             </Tooltip>
@@ -386,7 +411,7 @@ function PlayerController(props) {
         </div>
       </div>
       <div className={isOpen ? "drawer-bar is-show" : "drawer-bar"}>
-        <Drawer songId={id} songIndex={hanldSongClick} />
+        <Drawer songId={_id} songIndex={hanldSongClick} />
       </div>
     </div>
   );

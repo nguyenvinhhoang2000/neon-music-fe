@@ -1,35 +1,48 @@
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import ListSong from "components/ListSong";
-import React from "react";
+import favoriteSong from "api/favoriteSong";
+import ListSongPersonal from "components/ListSongPersonal";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { playAllFavoriteSong, resetFavoriteSong } from "./favoriteSongSlice";
 import "./style.scss";
 
 Personal.propTypes = {};
 
 function Personal(props) {
-  const [value, setValue] = React.useState("1");
+  const dispath = useDispatch();
+  const user = useSelector((state) => state.user.current);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  //call api
+  useEffect(() => {
+    const fetchFavoriteSongList = async () => {
+      const getFavoriteSong = await favoriteSong.getAll();
+
+      getFavoriteSong.favoriteSongList.map((x) => {
+        const action = playAllFavoriteSong(x);
+        dispath(action);
+      });
+    };
+    fetchFavoriteSongList();
+  }, [user.name]);
+
+  const favoriteSongList = useSelector((state) => state.favoriteSong);
+
   return (
     <div className='container'>
-      <div className='container-user-profile'>
-        <Avatar
-          alt='Remy Sharp'
-          src='https://s120-ava-talk.zadn.vn/5/c/5/5/2/120/045d9c0decb5452a962b2e0587d0142d.jpg'
-          sx={{ width: 95, height: 95 }}
-        />
+      {!!user.name ? (
+        <>
+          <div className='container-user-profile'>
+            <img src={user.avatar} alt='' />
 
-        <h3 class='title'>Nguyễn Vĩnh Hoàng</h3>
-      </div>
-      <div className='library-song-list'>
-        <ListSong></ListSong>
-      </div>
+            <h3 class='title'>{user.name}</h3>
+          </div>
+          <div className='library-song-list'>
+            <ListSongPersonal songList={favoriteSongList}></ListSongPersonal>
+          </div>
+        </>
+      ) : (
+        <div>Bạn cần phải đăng nhập</div>
+      )}
     </div>
   );
 }

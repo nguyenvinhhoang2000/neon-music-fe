@@ -1,7 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { IconButton, Tooltip } from "@mui/material";
-import { useTheme } from "@mui/system";
 import { removeSongList } from "feature/PlayerControl/playControlSlice";
 import PropTypes from "prop-types";
 import React from "react";
@@ -27,8 +26,8 @@ function Drawer(props) {
 
   const handleDeleteSong = (song) => {
     const songAtTheEnd = songList.length - 1 === songList.indexOf(song);
-    const deleteSongPlaying = songId === song.id;
-    if (songAtTheEnd || deleteSongPlaying) {
+    const deleteSongPlaying = songId === song._id;
+    if (songAtTheEnd) {
       songIndex(0);
       const action = removeSongList(song);
       dispath(action);
@@ -48,8 +47,8 @@ function Drawer(props) {
         <div className='drawer-list'>
           {songList.map((songlist) => (
             <div
-              key={songlist.id}
-              className={songId === songlist.id ? "media is-playing" : "media"}
+              key={songlist._id}
+              className={songId === songlist._id ? "media is-playing" : "media"}
             >
               <div
                 onClick={() => hanldClickSong(songlist)}
@@ -66,9 +65,7 @@ function Drawer(props) {
                 </div>
               </div>
               <Tooltip title='xóa khõi danh sách' arrow>
-                <IconButton
-                  onClick={() => handleDeleteSong(songlist, songlist.id)}
-                >
+                <IconButton onClick={() => handleDeleteSong(songlist)}>
                   <CloseIcon />
                 </IconButton>
               </Tooltip>

@@ -1,9 +1,9 @@
-import { FormHelperText } from "@material-ui/core";
-import FormControl from "@material-ui/core/FormControl";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import { FormHelperText } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import PropTypes from "prop-types";
@@ -29,7 +29,15 @@ function PasswordField(props) {
 
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <FormControl error={hasError} fullWidth margin='normal' variant='outlined'>
+    <FormControl
+      sx={{
+        marginTop: 1,
+      }}
+      error={hasError}
+      fullWidth
+      margin='normal'
+      variant='outlined'
+    >
       <InputLabel htmlFor={name}>{label}</InputLabel>
       <Controller
         name={name}

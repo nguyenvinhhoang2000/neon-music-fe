@@ -1,5 +1,6 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import store from "app/store";
+import { SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -7,14 +8,17 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <App />
+        </SnackbarProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

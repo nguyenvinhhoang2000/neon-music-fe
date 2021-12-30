@@ -1,5 +1,4 @@
 .zm-sidebar {
-  height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,24 +12,33 @@
 
   font-weight: 700;
 
-  & .zmp3-logo {
-    width: 120px;
-    height: 40px;
-    display: inline-block;
-    background: url(https://zmp3-static.zadn.vn/skins/zmp3-v6.1/images/backgrounds/logo-dark.svg)
-      50% / contain no-repeat;
-  }
-
   &--logo {
     display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
     width: 187px;
     height: 70px;
-    padding: 0 25px 0 28px;
 
-    & .zm-btn {
-      display: inline-block;
-      line-height: 0;
-      border-radius: 0;
+    font-size: 24px;
+
+    // & img {
+    //   width: 100%;
+    //   height: auto;
+    //   color: #fff;
+    // }
+    & .logo-neon {
+      font-family: "Oooh Baby", cursive;
+      letter-spacing: 2px;
+      font-size: 68px;
+      text-shadow: 0 0 7px #03bcf4, 0 0 10px #03bcf4, 0 0 21px #03bcf4,
+        0 0 42px #03bcf4, 0 0 82px #03bcf4;
+    }
+    & .logo-music {
+      margin: 0 0 7px 2px;
+      font-size: 18px;
+      text-shadow: 0 0 7px #f09, 0 0 10px #f09, 0 0 21px #f09, 0 0 42px #f09,
+        0 0 82px #f09, 0 0 92px #f09;
     }
   }
 

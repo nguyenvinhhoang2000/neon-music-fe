@@ -1,18 +1,19 @@
-import { TextField } from "@mui/material";
+import { Input } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 
-InputField.propTypes = {
+FileField.propTypes = {
   form: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
 
-  label: PropTypes.string,
+  onChange: PropTypes.func,
+
   disabled: PropTypes.bool,
 };
 
-function InputField(props) {
-  const { form, name, label, disabled } = props;
+function FileField(props) {
+  const { form, name, label, disabled, onChange } = props;
   const { errors } = form;
   const hasError = errors[name];
   return (
@@ -20,18 +21,24 @@ function InputField(props) {
       sx={{
         marginTop: 1,
       }}
+      accept='image/*'
+      id='contained-button-file'
+      type='file'
       name={name}
       control={form.control}
-      as={TextField}
+      // render={({ field: { onChange } }) => (
+      //   <Input onChange={(e) => onChange(e.target.files[0])} />
+      // )}
+      render={({ onChange }) => (
+        <Input type='file' onChange={(e) => onChange(e.target.files[0])} />
+      )}
       margin='normal'
-      variant='outlined'
       fullWidth
       disabled={disabled}
-      label={label}
       error={!!hasError}
       helperText={errors[name]?.message}
     />
   );
 }
 
-export default InputField;
+export default FileField;

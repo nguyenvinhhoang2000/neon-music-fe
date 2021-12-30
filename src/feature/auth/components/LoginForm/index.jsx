@@ -1,11 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Avatar,
-  Button,
-  LinearProgress,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Button, LinearProgress, Typography } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import InputField from "components/form-controls/InputField";
 import PasswordField from "components/form-controls/PasswordField";
 // import { LockOutlined } from "@mui/icons";
@@ -14,43 +9,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "relative",
-    paddingTop: theme.spacing(4),
-  },
-
-  title: {
-    margin: theme.spacing(2, 0, 3, 0),
-    textAlign: "center",
-  },
-
-  avatar: {
-    margin: "0 auto",
-    backgroundColor: theme.palette.secondary.main,
-  },
-
-  submit: {
-    margin: theme.spacing(3, 0, 2, 0),
-  },
-
-  progress: {
-    position: "absolute",
-    top: theme.spacing(1),
-    left: 0,
-    right: 0,
-  },
-}));
-
 LoginForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
 function LoginForm(props) {
-  const classes = useStyles();
-
   const schema = yup.object().shape({
-    identifier: yup
+    username: yup
       .string()
       .required("Vui lòng nhập email.")
       .email("Email không hợp lệ."),
@@ -59,7 +24,7 @@ function LoginForm(props) {
 
   const form = useForm({
     defaultValues: {
-      identifier: "",
+      username: "",
       password: "",
     },
     resolver: yupResolver(schema),
@@ -75,29 +40,53 @@ function LoginForm(props) {
   const { isSubmitting } = form.formState;
 
   return (
-    <div className={classes.root}>
-      {isSubmitting && <LinearProgress className={classes.progress} />}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        paddingBottom: 10,
+      }}
+    >
+      {isSubmitting && <LinearProgress />}
 
-      {/* <Avatar className={classes.avatar}>
-        <LockOutlined></LockOutlined>
-      </Avatar> */}
+      <Avatar
+        sx={{
+          backgroundColor: "red",
+          marginBottom: 1,
+        }}
+      >
+        <LockOutlinedIcon></LockOutlinedIcon>
+      </Avatar>
 
-      <Typography className={classes.title} component='h3' variant='h5'>
-        Sign In
+      <Typography
+        sx={{
+          marginBottom: 3,
+        }}
+        component='h3'
+        variant='h5'
+      >
+        Đăng Nhập
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name='identifier' label='Tài khoản' form={form} />
+        <InputField name='username' label='Tài khoản' form={form} />
         <PasswordField name='password' label='Mật khẩu' form={form} />
         <Button
           disabled={isSubmitting}
           type='submit'
-          className={classes.submit}
           variant='contained'
           color='primary'
           fullWidth
           size='large'
+          sx={{
+            marginTop: 2,
+            backgroundColor: "#7e04b1",
+            "&:hover": {
+              backgroundColor: "#680293",
+            },
+          }}
         >
-          Sign in
+          Đăng Nhập
         </Button>
       </form>
     </div>

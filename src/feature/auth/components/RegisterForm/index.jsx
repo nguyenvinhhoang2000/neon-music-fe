@@ -1,11 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Avatar,
-  Button,
-  LinearProgress,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Button, LinearProgress, Typography } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 // import { LockOutlined } from "@mui/icons";
 import InputField from "components/form-controls/InputField";
 import PasswordField from "components/form-controls/PasswordField";
@@ -13,44 +8,15 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "relative",
-    paddingTop: theme.spacing(4),
-  },
-
-  title: {
-    margin: theme.spacing(2, 0, 3, 0),
-    textAlign: "center",
-  },
-
-  avatar: {
-    margin: "0 auto",
-    backgroundColor: theme.palette.secondary.main,
-  },
-
-  submit: {
-    margin: theme.spacing(3, 0, 2, 0),
-  },
-
-  progress: {
-    position: "absolute",
-    top: theme.spacing(1),
-    left: 0,
-    right: 0,
-  },
-}));
+import FileField from "components/form-controls/FileField";
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
 function RegisterForm(props) {
-  const classes = useStyles();
-
   const schema = yup.object().shape({
-    fullName: yup
+    name: yup
       .string()
       .required("Vui lòng nhập họ tên.")
       .test("abc", "Họ tên phải có nhiều hơn 2 từ.", (value) => {
@@ -69,14 +35,16 @@ function RegisterForm(props) {
       .string()
       .required("Vui lòng nhập lại mật khẩu.")
       .oneOf([yup.ref("password")], "Mật khẩu không khớp."),
+    // avatar: yup.
   });
 
   const form = useForm({
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
       retypePassword: "",
+      avatar: null,
     },
     resolver: yupResolver(schema),
   });
@@ -91,35 +59,60 @@ function RegisterForm(props) {
   const { isSubmitting } = form.formState;
 
   return (
-    <div className={classes.root}>
-      {isSubmitting && <LinearProgress className={classes.progress} />}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        paddingBottom: 10,
+      }}
+    >
+      {isSubmitting && <LinearProgress />}
 
-      {/* <Avatar className={classes.avatar}>
-        <LockOutlined></LockOutlined>
-      </Avatar> */}
+      <Avatar
+        sx={{
+          backgroundColor: "red",
+          marginBottom: 1,
+        }}
+      >
+        <LockOutlinedIcon></LockOutlinedIcon>
+      </Avatar>
 
-      <Typography className={classes.title} component='h3' variant='h5'>
-        Create An Account
+      <Typography
+        sx={{
+          marginBottom: 3,
+        }}
+        component='h3'
+        variant='h5'
+      >
+        Tạo Tài Khoản
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name='fullName' label='Họ và tên' form={form} />
-        <InputField name='email' label='Email' form={form} />
+        <InputField name='name' label='Họ và tên' form={form} />
+        <InputField name='email' label='Tài khoản' form={form} />
         <PasswordField name='password' label='Mật khẩu' form={form} />
         <PasswordField
           name='retypePassword'
           label='Nhập lại mật khẩu'
           form={form}
         />
+        <FileField name='avatar' form={form} />
         <Button
           disabled={isSubmitting}
           type='submit'
-          className={classes.submit}
           variant='contained'
           color='primary'
           fullWidth
           size='large'
+          sx={{
+            marginTop: 2,
+            backgroundColor: "#7e04b1",
+            "&:hover": {
+              backgroundColor: "#680293",
+            },
+          }}
         >
-          Create An Account
+          TẠO TÀI KHOẢN
         </Button>
       </form>
     </div>

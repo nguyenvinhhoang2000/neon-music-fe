@@ -1,26 +1,23 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./style.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import SearchForm from "./components/SearchForm";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import { useState } from "react";
-import { IconButton } from "@mui/material";
-
-import Close from "@mui/icons-material/Close";
-import { Box } from "@mui/system";
-import { makeStyles } from "@material-ui/core";
-import Register from "feature/auth/components/Register";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 import Login from "feature/auth/components/Login";
+import Register from "feature/auth/components/Register";
+import { logout } from "feature/auth/userSlice";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import SearchForm from "./components/SearchForm";
+import "./style.scss";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { resetFavoriteSong } from "feature/Container/pages/Personal/favoriteSongSlice";
+import { Link } from "react-router-dom";
 
 Header.propTypes = {};
 
@@ -29,31 +26,12 @@ const MODE = {
   REGISTER: "register",
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  link: {
-    textDecoration: "none",
-    color: "#fff",
-  },
-  closeButton: {
-    position: "absolute",
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-    color: theme.palette.grey[500],
-    zIndex: 1,
-  },
-}));
-
 function Header(props) {
-  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const loggedInUser = useSelector((state) => state.user.current);
+  // const name = loggedInUser.name.split(" ");
+  const isLoggedIn = !!loggedInUser.name;
 
   const handleFilterChange = (newFilters) => {};
 
@@ -67,6 +45,24 @@ function Header(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispatch(action);
+    dispatch(resetFavoriteSong());
+    handleCloseMenu();
+  };
+
+  //---------MUI----------
+  const [anchorEl, setAnchorEl] = useState(null);
+  const menuOpen = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <header className='header'>
       <div className='level'>
@@ -81,36 +77,77 @@ function Header(props) {
         </div>
 
         <div className='level-right'>
-          <div className='zm-avatar-frame'>
-            <button className='zm-btn' onClick={handleClickOpen}>
+          {!isLoggedIn && (
+            <Button color='inherit' onClick={handleClickOpen}>
               Đăng nhập
-            </button>
-          </div>
+            </Button>
+          )}
+
+          {isLoggedIn && (
+            <>
+              <Button
+                id='basic-button'
+                aria-expanded={menuOpen ? "true" : undefined}
+                onClick={handleClick}
+              >
+                {!!loggedInUser.avatar ? (
+                  <img src={loggedInUser.avatar} alt='' />
+                ) : (
+                  <AccountCircleIcon />
+                )}
+                Hello, {loggedInUser.name.split(" ").splice(1, 2).join(" ")}!
+              </Button>
+              <Menu
+                id='basic-menu'
+                anchorEl={anchorEl}
+                open={menuOpen}
+                onClose={handleCloseMenu}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                {/* <MenuItem onClick={handleCloseMenu}>
+                  <Link to='my-account'>Tài Khoản của tôi</Link>
+                </MenuItem> */}
+                <MenuItem onClick={handleLogoutClick}>Đăng xuất</MenuItem>
+              </Menu>
+            </>
+          )}
         </div>
 
         <Dialog
-          disableEscapeKeyDown
-          disableBackdropClick
           open={open}
           onClose={handleClose}
           aria-labelledby='form-dialog-title'
         >
-          <IconButton onClick={handleClose} className={classes.closeButton}>
-            <Close />
+          <IconButton
+            sx={{
+              width: 40,
+              margin: "0 0 0 auto",
+            }}
+            onClick={handleClose}
+          >
+            <CloseIcon />
           </IconButton>
 
-          <DialogContent>
+          <DialogContent
+            sx={{
+              padding: "0 24px 8px 24px",
+            }}
+          >
             {mode === MODE.REGISTER && (
               <>
                 <Register closeDialog={handleClose} />
                 <Box textAlign='center'>
                   <Button
-                    color='primary'
+                    sx={{
+                      color: "#7200a1",
+                    }}
                     onClick={() => {
                       setMode(MODE.LOGIN);
                     }}
                   >
-                    Alredy have an account? Login here
+                    Đã có tài khoản? Đăng nhập tại đây!!!
                   </Button>
                 </Box>
               </>
@@ -121,12 +158,14 @@ function Header(props) {
                 <Login closeDialog={handleClose} />
                 <Box textAlign='center'>
                   <Button
-                    color='primary'
                     onClick={() => {
                       setMode(MODE.REGISTER);
                     }}
+                    sx={{
+                      color: "#7200a1",
+                    }}
                   >
-                    Don't have an account? Register here
+                    Chưa có tài khoản? Đăng kí tại đây!!!
                   </Button>
                 </Box>
               </>

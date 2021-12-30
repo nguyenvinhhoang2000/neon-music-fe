@@ -1,7 +1,8 @@
 import axios from "axios";
+import StorageKeys from "constants/storage-keys";
 
 const axiosClient = axios.create({
-  baseURL: "https://api.ezfrontend.com/",
+  baseURL: "http://localhost:3001/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,6 +13,9 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    const logged = localStorage.getItem(StorageKeys.TOKEN);
+    if (logged) config.headers.Authorization = `Bearer ${logged}`;
+
     return config;
   },
   function (error) {
@@ -31,14 +35,11 @@ axiosClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const { config, status, data } = error.response;
-    const URLS = ["/auth/local/register", "/auth/local"];
+    const URLS = ["api/auth/register", "api/auth/login"];
     if (URLS.includes(config.url) && status === 400) {
-      const errorList = data.data || [];
-      const firstError = errorList.length > 0 ? errorList[0] : {};
-      const messageList = firstError.messages || [];
-      const firstMessage = messageList.length > 0 ? messageList[0] : {};
-      throw new Error(firstMessage.message);
+      throw new Error(data.message);
     }
+
     return Promise.reject(error);
   }
 );

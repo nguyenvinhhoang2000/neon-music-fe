@@ -1,4 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AlbumOutlinedIcon from "@mui/icons-material/AlbumOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -11,22 +11,32 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
+import logo from "assets/img/chuki.png";
+import { useSelector } from "react-redux";
 
 SideBar.propTypes = {};
 
 function SideBar(props) {
+  const showPlayerControl = useSelector((state) => state.playingList);
+
   return (
-    <div className='zm-sidebar'>
+    <div
+      style={
+        showPlayerControl.length > 0
+          ? { height: "calc(100vh - 90px)" }
+          : { height: "100vh" }
+      }
+      className='zm-sidebar'
+    >
       <div className='zm-sidebar--logo'>
-        <button className='zm-btn button' tabIndex='0'>
-          <div className='zmp3-logo'></div>
-        </button>
+        <h1 className='logo-neon'>neon</h1>
+        <span className='logo-music'>music</span>
       </div>
 
       <div className='zm-sidebar--main'>
         <ul>
           <li className='active'>
-            <NavLink exact to='/'>
+            <NavLink to='/personal'>
               <LibraryMusicOutlinedIcon />
               Cá Nhân
             </NavLink>
@@ -38,13 +48,13 @@ function SideBar(props) {
             </NavLink>
           </li>
           <li>
-            <NavLink to='/1'>
+            <NavLink exact to='/'>
               <TimelineOutlinedIcon />
-              #zingchart
+              Tất cả bài hát
             </NavLink>
           </li>
           <li>
-            <NavLink to='/3'>
+            <NavLink to='/1'>
               <RadioOutlinedIcon />
               Radio
               <figure className='img'>
@@ -68,32 +78,32 @@ function SideBar(props) {
 
       <div className='zm-sidebar--scroll'>
         <div className='zm-sidebar--scrolbar'>
-          <ul>
+          {/* <ul>
             <li>
-              <NavLink to='/4'>
+              <NavLink to='/#'>
                 <MusicNoteOutlinedIcon />
                 Nhạc Mới
               </NavLink>
             </li>
             <li>
-              <NavLink to='/5'>
+              <NavLink to='/#'>
                 <CategoryOutlinedIcon />
                 Thể Loại
               </NavLink>
             </li>
             <li>
-              <NavLink to='/6'>
+              <NavLink to='/#'>
                 <StarBorderOutlinedIcon />
                 Top 100
               </NavLink>
             </li>
             <li>
-              <NavLink to='/7'>
+              <NavLink to='/#'>
                 <LiveTvOutlinedIcon />
                 MV
               </NavLink>
             </li>
-          </ul>
+          </ul> */}
 
           <div className='vip-banner'>
             <div className='text'>
@@ -106,7 +116,7 @@ function SideBar(props) {
         </div>
       </div>
       <div className='zm-sidebar--addplaylist'>
-        <AddIcon />
+        <AddOutlinedIcon />
         Tạo playlist mới
       </div>
     </div>
