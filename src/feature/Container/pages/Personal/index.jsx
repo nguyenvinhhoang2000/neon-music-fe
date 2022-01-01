@@ -34,7 +34,7 @@ function Personal(props) {
           <div className='container-user-profile'>
             <img src={user.avatar} alt='' />
 
-            <h3 class='title'>{user.name}</h3>
+            <h3 className='title'>{user.name}</h3>
           </div>
           <div className='library-song-list'>
             <ListSongPersonal songList={favoriteSongList}></ListSongPersonal>

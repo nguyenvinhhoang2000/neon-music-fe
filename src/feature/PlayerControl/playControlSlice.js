@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import imgSrc1 from "assets/img/eight.jpg";
-import audio1 from "assets/music/eight.mp3";
 
 const playControlSlice = createSlice({
   name: "songlist",

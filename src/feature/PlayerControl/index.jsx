@@ -33,10 +33,11 @@ function PlayerController(props) {
 
   const [songIndex, setSongIndex] = useState(0);
 
-  const { name, singer, img, url, _id } = songList[songIndex];
+  const { name_song, name_singer, img_song, url_song, _id } =
+    songList[songIndex];
 
   //hooks
-  const audioRef = useRef(new Audio(url));
+  const audioRef = useRef(new Audio(url_song));
   const intervalRef = useRef();
   const isReady = useRef(false);
   const theme = useTheme();
@@ -186,7 +187,7 @@ function PlayerController(props) {
   useEffect(() => {
     audioRef.current.pause();
 
-    audioRef.current = new Audio(url);
+    audioRef.current = new Audio(url_song);
     setPosition(0);
 
     if (isReady.current) {
@@ -205,11 +206,11 @@ function PlayerController(props) {
         <div className='level player-controls__container'>
           <div className='player-controls-left '>
             <figure className='image'>
-              <img src={img} alt={name} />
+              <img src={img_song} alt={name_song} />
             </figure>
             <div className='content'>
-              <p className='name-song'>{name}</p>
-              <span className='name-singer'>{singer}</span>
+              <p className='name-song'>{name_song}</p>
+              <span className='name-singer'>{name_singer}</span>
             </div>
           </div>
 
@@ -218,6 +219,7 @@ function PlayerController(props) {
               <div className='actions'>
                 <Tooltip title='Phát ngẫu nhiên' arrow>
                   <IconButton
+                    onClick={handleRandomClick}
                     sx={{
                       "&:hover": {
                         backgroundColor: "rgb(255 255 255 / 16%)",
@@ -228,7 +230,6 @@ function PlayerController(props) {
                       style={
                         isRandom ? { color: "#7200A1" } : { color: "#fff" }
                       }
-                      onClick={handleRandomClick}
                       fontSize='medium'
                     />
                   </IconButton>
@@ -274,6 +275,7 @@ function PlayerController(props) {
                 </IconButton>
                 <Tooltip title='Lặp lại' arrow>
                   <IconButton
+                    onClick={handleRepeatClick}
                     sx={{
                       "&:hover": {
                         backgroundColor: "rgb(255 255 255 / 16%)",
@@ -284,7 +286,6 @@ function PlayerController(props) {
                       style={
                         isRepeat ? { color: "#7200A1" } : { color: "#fff" }
                       }
-                      onClick={handleRepeatClick}
                       fontSize='medium'
                     />
                   </IconButton>

@@ -11,7 +11,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./style.scss";
-import logo from "assets/img/chuki.png";
+
 import { useSelector } from "react-redux";
 
 SideBar.propTypes = {};

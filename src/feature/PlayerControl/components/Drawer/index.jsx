@@ -56,12 +56,12 @@ function Drawer(props) {
               >
                 <MusicNoteIcon />
                 <div className='song-thumb'>
-                  <img src={songlist.img} alt='' />
+                  <img src={songlist.img_song} alt='' />
                 </div>
 
                 <div className='card-info'>
-                  <p>{songlist.name}</p>
-                  <span>{songlist.singer}</span>
+                  <p>{songlist.name_song}</p>
+                  <span>{songlist.name_singer}</span>
                 </div>
               </div>
               <Tooltip title='xóa khõi danh sách' arrow>

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./style.scss";
-import img from "assets/img/album/justatee.png";
+// import img from "assets/img/album/justatee.png";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 CardAlbum.propTypes = {};
@@ -14,9 +14,7 @@ function CardAlbum(props) {
           <button>
             <i class='far fa-play-circle'></i>
           </button>
-          <a href=''>
-            <img src={img} alt='' />
-          </a>
+          <a href=''>{/* <img src={img} alt='' /> */}</a>
         </div>
 
         <div className='card-item--title'>
