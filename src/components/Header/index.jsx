@@ -11,13 +11,14 @@ import Box from "@mui/material/Box";
 import Login from "feature/auth/components/Login";
 import Register from "feature/auth/components/Register";
 import { logout } from "feature/auth/userSlice";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchForm from "./components/SearchForm";
 import "./style.scss";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { resetFavoriteSong } from "feature/Container/pages/Personal/favoriteSongSlice";
 import { Link } from "react-router-dom";
+import songApi from "api/songApi";
 
 Header.propTypes = {};
 
@@ -28,12 +29,19 @@ const MODE = {
 
 function Header(props) {
   const dispatch = useDispatch();
+  const [listSong, setListSong] = useState([]);
 
   const loggedInUser = useSelector((state) => state.user.current);
   // const name = loggedInUser.name.split(" ");
   const isLoggedIn = !!loggedInUser.name;
 
-  const handleFilterChange = (newFilters) => {};
+  const handleFilterChange = async (newFilters) => {
+    // setSearch(newFilters);
+
+    const listSong = await songApi.search(newFilters);
+
+    setListSong(listSong);
+  };
 
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
@@ -73,7 +81,7 @@ function Header(props) {
           <button className='zm-btn button'>
             <ArrowForwardIcon />
           </button>
-          <SearchForm onSubmit={handleFilterChange} />
+          <SearchForm onSubmit={handleFilterChange} listSong={listSong} />
         </div>
 
         <div className='level-right'>

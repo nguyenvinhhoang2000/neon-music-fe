@@ -1,13 +1,23 @@
 import axiosClient from "./axiosClient";
 
 const songApi = {
-  getAll(params) {
+  getAll(search) {
     const url = "/api/songs";
-    return axiosClient.get(url, { params: params });
+    return axiosClient.get(url, search);
+  },
+
+  search(data) {
+    const url = "/api/songs/search";
+    return axiosClient.post(url, data);
   },
 
   get(id) {
     const url = `/audio/${id}`;
+    return axiosClient.get(url);
+  },
+
+  getMyUpload() {
+    const url = "api/songs/myupload";
     return axiosClient.get(url);
   },
 
@@ -17,12 +27,12 @@ const songApi = {
   },
 
   update(data) {
-    const url = `/audio/${data.id}`;
-    return axiosClient.patch(url, data);
+    const url = `api/songs/upload/${data.get("id")}`;
+    return axiosClient.put(url, data);
   },
 
   remove(id) {
-    const url = `/audio/${id}`;
+    const url = `api/songs/upload/${id}`;
     return axiosClient.delete(url);
   },
 };

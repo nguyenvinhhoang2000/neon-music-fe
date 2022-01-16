@@ -2,6 +2,7 @@ import favoriteSong from "api/favoriteSong";
 import songList from "api/songApi";
 import ListSong from "components/ListSong";
 import React, { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { playAllFavoriteSong } from "../Personal/favoriteSongSlice";
 import { addAllSongg } from "./allSongSlice";
@@ -12,6 +13,7 @@ Songs.propTypes = {};
 function Songs(props) {
   const dispath = useDispatch();
   const user = useSelector((state) => state.user.current);
+
   //call api
   useEffect(() => {
     //allSong

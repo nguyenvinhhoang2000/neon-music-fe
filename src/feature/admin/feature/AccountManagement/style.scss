@@ -1,0 +1,13 @@
+.account-manageget {
+  margin-left: 240px;
+  margin-top: 70px;
+  display: flex;
+  width: 100%;
+
+  & .list-item {
+    & .media {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

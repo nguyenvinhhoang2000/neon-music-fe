@@ -12,15 +12,16 @@ import FileField from "components/form-controls/FileField";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import songApi from "api/songApi";
 import { useSnackbar } from "notistack";
-import "./style.scss";
 import { useEffect } from "react";
 import { useState } from "react";
 
-UploadForm.propTypes = {
+EditForm.propTypes = {
   onSubmit: PropTypes.func,
+  edit: PropTypes.object,
 };
 
-function UploadForm(props) {
+function EditForm(props) {
+  const { edit } = props;
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     name: yup
@@ -47,9 +48,9 @@ function UploadForm(props) {
 
   const form = useForm({
     defaultValues: {
-      name_song: "",
-      name_singer: "",
-      category: "",
+      name_song: edit.name_song,
+      name_singer: edit.name_singer,
+      category: edit.category,
       song: null,
       img_song: null,
     },
@@ -57,39 +58,39 @@ function UploadForm(props) {
   });
 
   const handleSubmit = async (values) => {
-    // try {
-    //   let formData = new FormData();
+    try {
+      let formData = new FormData();
 
-    //   formData.append("name_song", values.name_song);
-    //   formData.append("name_singer", values.name_singer);
-    //   formData.append("category", values.category);
-    //   formData.append("song", values.song);
-    //   formData.append("img_song", values.img_song);
+      formData.append("id", edit._id);
+      formData.append("name_song", values.name_song);
+      formData.append("name_singer", values.name_singer);
+      formData.append("category", values.category);
+      formData.append("song", values.song);
+      formData.append("img_song", values.img_song);
 
-    //   await songApi.add(formData);
-    //   enqueueSnackbar("Cảm ơn đóng góp của bạn!!!", { variant: "success" });
-    // } catch (error) {
-    //   console.log(error);
-    //   enqueueSnackbar(error.message, { variant: "error" });
-    // }
-    console.log(values);
+      await songApi.update(formData);
+      enqueueSnackbar("Chỉnh sửa thành công!!!", { variant: "success" });
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(error.message, { variant: "error" });
+    }
   };
 
   const { isSubmitting } = form.formState;
 
   const [nameSong, setNameSong] = useState();
   const [nameImg, setNameImg] = useState();
-  useEffect(() => {
-    if (form.watch("song")?.name !== undefined) {
-      setNameSong(form.watch("song")?.name);
-    }
-  }, [form.watch("song")]);
-  //img
-  useEffect(() => {
-    if (form.watch("img_song")?.name !== undefined) {
-      setNameImg(form.watch("img_song")?.name);
-    }
-  }, [form.watch("img_song")]);
+  // useEffect(() => {
+  //   if (form.watch("song")?.name !== undefined) {
+  //     setNameSong(form.watch("song")?.name);
+  //   }
+  // }, [form.watch("song")]);
+  // //img
+  // useEffect(() => {
+  //   if (form.watch("img_song")?.name !== undefined) {
+  //     setNameImg(form.watch("img_song")?.name);
+  //   }
+  // }, [form.watch("img_song")]);
 
   return (
     <div
@@ -117,7 +118,7 @@ function UploadForm(props) {
         component='h3'
         variant='h5'
       >
-        Tải lên bài hát mới
+        Chỉnh sửa bài hát
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <InputField name='name_song' label='Tên bài hát' form={form} />
@@ -127,16 +128,14 @@ function UploadForm(props) {
         <label className='label-input-song' htmlFor='input-song'>
           <FileField id='input-song' name='song' form={form} />
           <span>
-            {nameSong != undefined ? form.watch("song")?.name : "Chọn bài hát"}
+            {nameSong != undefined
+              ? form.watch("song")?.name
+              : edit?.cloudinary_id_song}
           </span>
         </label>
         <label className='label-input-photo' htmlFor='input-photo'>
           <FileField id='input-photo' name='img_song' form={form} />
-          <span>
-            {nameImg != undefined
-              ? form.watch("img_song")?.name
-              : "Chọn hình ảnh"}
-          </span>
+          <img src={edit.img_song} style={{ width: "552px" }} alt='' />
         </label>
         <Button
           disabled={isSubmitting}
@@ -153,11 +152,11 @@ function UploadForm(props) {
             },
           }}
         >
-          TẢI LÊN
+          Lưu
         </Button>
       </form>
     </div>
   );
 }
 
-export default UploadForm;
+export default EditForm;
